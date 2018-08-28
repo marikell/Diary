@@ -1,9 +1,17 @@
 package silva.marianne.diary;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+
+import java.util.List;
+
+import silva.marianne.diary.models.Student;
+import silva.marianne.diary.repositories.StudentRepository;
 
 //quando falamos de activity, nos referimos a tela da aplicação.
 public class ListStudentsActivity extends AppCompatActivity {
@@ -17,13 +25,27 @@ public class ListStudentsActivity extends AppCompatActivity {
         //que está na pasta res -> de resources
         setContentView(R.layout.activity_list_students);
 
-        String [] students= {"Daniel","Ronaldo", "Jeferson", "Felipe"};
+        StudentRepository studentRepository = new StudentRepository(this);
+        List<Student> students = studentRepository.search();
+        studentRepository.close();
         //devolve uma instancia da view gerada no set content view
         ListView listStudents = (ListView) findViewById(R.id.lista_alunos);
         //contexto serve para identificação e o que faremos é passar a propria activity
         //layout serve para identificar qual layout vamos utilizar (no caso só text view)
         //converte os alunos que são uma string em view para serem introduzidos na lista.
-        ArrayAdapter<String> adapter = new ArrayAdapter <String> (this, android.R.layout.simple_list_item_1, students);
+        ArrayAdapter<Student> adapter = new ArrayAdapter <Student> (this, android.R.layout.simple_list_item_1, students);
         listStudents.setAdapter(adapter);
+        Button newStudentButton = (Button) findViewById(R.id.newStudent);
+
+        newStudentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //instancia a intenção
+                Intent intentForm = new Intent(ListStudentsActivity.this, FormActivity.class);
+                //avisa ao android sua intenção
+                startActivity(intentForm);
+            }
+        });
+
     }
 }
