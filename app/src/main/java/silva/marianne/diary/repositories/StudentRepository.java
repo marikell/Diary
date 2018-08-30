@@ -25,6 +25,12 @@ public class StudentRepository extends SQLiteOpenHelper{
         db.execSQL(sql);
     }
 
+    public void remove(int id){
+        SQLiteDatabase db = getWritableDatabase();
+        String sql = "DELETE FROM Students where id =" + id;
+        db.execSQL(sql);
+    }
+
     public List<Student> search(){
         String sql = "SELECT * FROM Students";
         SQLiteDatabase db = getReadableDatabase();
